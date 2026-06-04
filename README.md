@@ -2,7 +2,7 @@
 
 ## Requirements
 - Computer or raspberry pi with node.js v22 + npm
-- 2 (or more) MeshCore nodes flashed with KISS radio firmware
+- 2 (or more) MeshCore nodes flashed with KISS radio firmware connected via USB
 
 ## Usage
 
