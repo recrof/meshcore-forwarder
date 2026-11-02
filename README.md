@@ -14,3 +14,21 @@ npm install .
 Edit `config.mjs`
 
 Then run with `node index.mjs`
+
+## Filtering
+
+`config.filter(packet, constants)` decides which packets get forwarded. Useful packet helpers:
+
+- `packet.isFlood` – `FLOOD` or `TRANSPORT_FLOOD` (region-scoped flood)
+- `packet.isInRegion('#cs')` – packet is scoped to the given hashtag region
+- `packet.isFromChannel('#cs')` – `GRP_TXT` / `GRP_DATA` decrypts with the given hashtag channel
+- `packet.type`, `packet.routeType`, `packet.transportCodes`
+
+Example – forward all non-flood packets, but only floods scoped to `#cs`:
+
+```js
+filter(packet, constants) {
+  if (!packet.isFlood) return true;
+  return packet.isInRegion('#cs');
+},
+```

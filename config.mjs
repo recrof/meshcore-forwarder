@@ -1,8 +1,8 @@
 export const config = {
   radios: [
     {
-      name: 'Czech',
-      port: '/dev/serial/by-id/usb-RAKwireless_WisCore_RAK3401_Board_AB64A0C3AA6F778B-if00',
+      name: 'CZ',
+      port: '/dev/cu.usbmodem101',
       freq: 869.432,
       bw: 62.5,
       sf: 7,
@@ -10,16 +10,18 @@ export const config = {
       txPower: 22,
     },
     {
-      name: 'EU',
-      port: '/dev/serial/by-id/usb-Espressif_USB_JTAG_serial_debug_unit_80:F1:B2:64:8E:34-if00',
+      name: 'SK',
+      port: '/dev/cu.usbmodemF09E9E7747081',
       freq: 869.618,
       bw: 62.5,
-      sf: 8,
+      sf: 7,
       cr: 5,
       txPower: 22,
     },
   ],
+  // forward all non-flood packets, but only flood packets scoped to region #cs
   filter(packet, constants) {
-    return packet.type === constants.GRP_TXT && packet.isFromChannel('#cs');
+    if (!packet.isFlood) return true;
+    return packet.isInRegion('#cs');
   },
 };
