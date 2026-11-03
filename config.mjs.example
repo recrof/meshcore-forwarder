@@ -1,8 +1,8 @@
 export const config = {
   // prefix log lines with an ISO timestamp (off by default; journald adds its own)
-  logTimestamps: false,
+  logTimestamps: true,
   // log received GRP_TXT (channel) messages, decrypted with debugChannels
-  debug: false,
+  debug: true,
   // channels to decrypt in debug output: '#hashtag', or { name, key: '<32 hex chars>' }
   debugChannels: [
     { name: 'Public', key: '8b3387e9c5cdea6ac9e5edbaa115cd72' },
@@ -31,6 +31,6 @@ export const config = {
   // forward all non-flood packets, but only flood packets scoped to region #cs
   filter(packet, constants) {
     if (!packet.isFlood) return true;
-    return packet.isInRegion('#cs');
-  },
+    return packet.isInRegion('#cs') || (packet.type === constants.GRP_TXT && (packet.isFromChannel('#cs') || packet.isFromChannel('#hamradio')));
+  }
 };
