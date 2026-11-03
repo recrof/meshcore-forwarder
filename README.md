@@ -11,7 +11,11 @@ git clone https://github.com/recrof/meshcore-forwarder
 cd meshcore-forwarder
 npm install .
 ```
-Edit `config.mjs`
+Copy the example config and edit it:
+
+```sh
+cp config.mjs.example config.mjs
+```
 
 Then run with `node index.mjs`
 
