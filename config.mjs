@@ -1,4 +1,13 @@
 export const config = {
+  // prefix log lines with an ISO timestamp (off by default; journald adds its own)
+  logTimestamps: false,
+  // log received GRP_TXT (channel) messages, decrypted with debugChannels
+  debug: false,
+  // channels to decrypt in debug output: '#hashtag', or { name, key: '<32 hex chars>' }
+  debugChannels: [
+    { name: 'Public', key: '8b3387e9c5cdea6ac9e5edbaa115cd72' },
+    '#cs',
+  ],
   radios: [
     {
       name: 'CZ',

@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 import { config } from './config.mjs';
 import { Radio } from './lib/radio.mjs';
-import { wrap, Constants } from './lib/packet-wrap.mjs';
+import { wrap, Constants, formatGrpTxt, resolveChannels } from './lib/packet-wrap.mjs';
 import { Dedup } from './lib/dedup.mjs';
-import { makeLogger } from './lib/log.mjs';
+import { makeLogger, configureLogging, isDebug } from './lib/log.mjs';
+
+configureLogging({ timestamps: config.logTimestamps, debug: config.debug });
 
 const log = makeLogger('forwarder');
 const dedup = new Dedup();
+const debugChannels = resolveChannels(config.debugChannels);
 
 function handleRx(sourceRadio, radios, raw) {
   let packet;
@@ -22,6 +25,10 @@ function handleRx(sourceRadio, radios, raw) {
   if (dedup.seen(packet)) {
     log.info(`${sourceRadio.name}: dup ${packet.typeName} dropped`);
     return;
+  }
+
+  if (isDebug() && packet.type === Constants.GRP_TXT) {
+    log.debug(`${sourceRadio.name}: ${formatGrpTxt(packet, debugChannels)}`);
   }
 
   let pass = true;

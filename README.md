@@ -15,6 +15,14 @@ Edit `config.mjs`
 
 Then run with `node index.mjs`
 
+## Logging
+
+Optional keys in `config.mjs`:
+
+- `logTimestamps: true` – prefix each log line with an ISO timestamp (off by default, since journald adds its own)
+- `debug: true` – log every unique received `GRP_TXT` (channel message), decrypted with the channels listed in `debugChannels`. Messages on unlisted channels are logged with just the channel hash byte and raw hex
+- `debugChannels` – channels to try: `'#hashtag'` names, or `{ name: 'Public', key: '<32 hex chars>' }` for channels with an explicit secret
+
 ## Filtering
 
 `config.filter(packet, constants)` decides which packets get forwarded. Useful packet helpers:
