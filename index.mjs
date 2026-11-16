@@ -11,7 +11,7 @@ const log = makeLogger('forwarder');
 const dedup = new Dedup();
 const debugChannels = resolveChannels(config.debugChannels);
 
-function handleRx(sourceRadio, radios, raw) {
+function handleRx(sourceRadio, radios, raw, meta) {
   let packet;
   try {
     packet = wrap(raw);
@@ -28,7 +28,8 @@ function handleRx(sourceRadio, radios, raw) {
   }
 
   if (isDebug() && packet.type === Constants.GRP_TXT) {
-    log.debug(`${sourceRadio.name}: ${formatGrpTxt(packet, debugChannels)}`);
+    const signal = meta ? ` snr=${meta.snr} rssi=${meta.rssi}` : '';
+    log.debug(`${sourceRadio.name}:${signal} ${formatGrpTxt(packet, debugChannels)}`);
   }
 
   let pass = true;
@@ -65,7 +66,7 @@ async function main() {
   }
 
   for (const r of radios) {
-    r.on('rx', (raw) => handleRx(r, radios, raw));
+    r.on('rx', (raw, meta) => handleRx(r, radios, raw, meta));
   }
 
   log.info(`up with ${radios.length} radios`);
