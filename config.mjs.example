@@ -1,6 +1,8 @@
 export const config = {
   // prefix log lines with an ISO timestamp (off by default; journald adds its own)
   logTimestamps: true,
+  // seconds between per-radio stats lines (default 30, 0 disables)
+  statsInterval: 30,
   // log received GRP_TXT (channel) messages, decrypted with debugChannels
   debug: true,
   // channels to decrypt in debug output: '#hashtag', or { name, key: '<32 hex chars>' }

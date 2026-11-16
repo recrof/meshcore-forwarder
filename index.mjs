@@ -22,10 +22,7 @@ function handleRx(sourceRadio, radios, raw, meta) {
 
   if (packet.is_marked_do_not_retransmit) return;
 
-  if (dedup.seen(packet)) {
-    log.info(`${sourceRadio.name}: dup ${packet.typeName} dropped`);
-    return;
-  }
+  if (dedup.seen(packet)) return;
 
   if (isDebug() && packet.type === Constants.GRP_TXT) {
     const signal = meta ? ` snr=${meta.snr} rssi=${meta.rssi}` : '';
@@ -56,7 +53,7 @@ async function main() {
     process.exit(1);
   }
 
-  const radios = config.radios.map((cfg) => new Radio(cfg, makeLogger(cfg.name)));
+  const radios = config.radios.map((cfg) => new Radio(cfg, makeLogger(cfg.name), { statsInterval: config.statsInterval }));
 
   try {
     await Promise.all(radios.map((r) => r.start()));
