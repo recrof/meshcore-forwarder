@@ -38,6 +38,8 @@ export const config = {
       //   name: 'SK forwarder',     // "origin" in reports (default: radio name)
       //   rejectUnauthorized: true, // false = don't verify the TLS certificate
       // },
+      // or, for brokers using meshcoretomqtt token auth (signed by the modem's key):
+      // mqtt: { url: 'wss://mqtt-eu-v1.letsmesh.net:443', auth: 'token', iata: 'BTS' },
     },
   ],
   // forward all non-flood packets, but only flood packets scoped to region #cs

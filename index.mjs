@@ -72,7 +72,7 @@ async function main() {
   for (const r of radios) {
     for (const mqttCfg of [r.cfg.mqtt ?? []].flat()) {
       const obs = new MqttObserver(r, mqttCfg, makeLogger(`${r.name}/mqtt`));
-      obs.start();
+      obs.start().catch((err) => log.warn(`${r.name}: mqtt observer failed to start: ${err.message}`));
       observers.push(obs);
     }
   }

@@ -61,6 +61,18 @@ mqtt: {
 },
 ```
 
+Brokers that use meshcoretomqtt token auth (e.g. LetsMesh) take `auth: 'token'` instead of `username`/`password`. The token is signed by the modem's own key, so the private key never leaves the radio:
+
+```js
+mqtt: {
+  url: 'wss://mqtt-eu-v1.letsmesh.net:443',
+  auth: 'token',
+  iata: 'BTS',
+  // audience: 'mqtt-eu-v1.letsmesh.net', // optional, defaults to the URL hostname
+  // owner: '<companion pubkey>', email: 'you@example.com', // optional, sent only over verified TLS
+},
+```
+
 `mqtt` can also be an array to report to several brokers. Each radio publishes under its modem's public key:
 
 - `meshcore/<iata>/<pubkey>/packets` – one message per received packet, including duplicates and packets the filter drops, with SNR, RSSI and score
