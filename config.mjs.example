@@ -28,6 +28,16 @@ export const config = {
       sf: 7,
       cr: 5,
       txPower: 22,
+      // optional: report every packet this radio hears (with SNR/RSSI) to MQTT,
+      // meshcoretomqtt format; can also be an array to report to several brokers
+      // mqtt: {
+      //   url: 'mqtts://mqtt.example.com:8883',
+      //   username: 'user',
+      //   password: 'secret',
+      //   iata: 'BTS',              // location code used in the topic
+      //   name: 'SK forwarder',     // "origin" in reports (default: radio name)
+      //   rejectUnauthorized: true, // false = don't verify the TLS certificate
+      // },
     },
   ],
   // forward all non-flood packets, but only flood packets scoped to region #cs

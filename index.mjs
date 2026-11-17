@@ -3,6 +3,7 @@ import { config } from './config.mjs';
 import { Radio } from './lib/radio.mjs';
 import { wrap, Constants, formatGrpTxt, resolveChannels } from './lib/packet-wrap.mjs';
 import { Dedup } from './lib/dedup.mjs';
+import { MqttObserver } from './lib/observer.mjs';
 import { makeLogger, configureLogging, isDebug } from './lib/log.mjs';
 
 configureLogging({ timestamps: config.logTimestamps, debug: config.debug });
@@ -66,10 +67,21 @@ async function main() {
     r.on('rx', (raw, meta) => handleRx(r, radios, raw, meta));
   }
 
+  // per-radio MQTT reporting: radio.mqtt is one broker config or an array of them
+  const observers = [];
+  for (const r of radios) {
+    for (const mqttCfg of [r.cfg.mqtt ?? []].flat()) {
+      const obs = new MqttObserver(r, mqttCfg, makeLogger(`${r.name}/mqtt`));
+      obs.start();
+      observers.push(obs);
+    }
+  }
+
   log.info(`up with ${radios.length} radios`);
 
   const shutdown = async (sig) => {
     log.info(`${sig} received, shutting down`);
+    await Promise.allSettled(observers.map((o) => o.stop()));
     await Promise.allSettled(radios.map((r) => r.stop()));
     process.exit(0);
   };

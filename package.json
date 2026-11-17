@@ -14,7 +14,8 @@
     "node": ">=20"
   },
   "dependencies": {
-    "serialport": "^12.0.0",
-    "@liamcottle/meshcore.js": "^1.15.0"
+    "@liamcottle/meshcore.js": "^1.15.0",
+    "mqtt": "^5.16.1",
+    "serialport": "^12.0.0"
   }
 }

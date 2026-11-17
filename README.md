@@ -45,3 +45,23 @@ filter(packet, constants) {
   return packet.isInRegion('#cs');
 },
 ```
+
+## MQTT observer
+
+Any radio can report every packet it hears to an MQTT broker, in the [meshcoretomqtt](https://github.com/Cisien/meshcoretomqtt) JSON format (same as ZephCore observers). Add an `mqtt` key to the radio in `config.mjs`:
+
+```js
+mqtt: {
+  url: 'mqtts://mqtt.example.com:8883',
+  username: 'user',
+  password: 'secret',
+  iata: 'BTS',
+  name: 'SK forwarder',     // optional, defaults to the radio name
+  rejectUnauthorized: true, // optional, false = don't verify the TLS certificate
+},
+```
+
+`mqtt` can also be an array to report to several brokers. Each radio publishes under its modem's public key:
+
+- `meshcore/<iata>/<pubkey>/packets` – one message per received packet, including duplicates and packets the filter drops, with SNR, RSSI and score
+- `meshcore/<iata>/<pubkey>/status` – retained `online` status with board model, noise floor and RX errors, refreshed every 5 minutes; `offline` on shutdown or disconnect
